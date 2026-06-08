@@ -237,6 +237,6 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 <div align="center">
-Built as a portfolio project by Johnny · 
-<a href="[https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/johnny-ngare-55228b229/)">LinkedIn</a>
-</div>
+  Built as a portfolio project by Johnny · 
+  <a href="https://www.linkedin.com/in/johnny-ngare-55228b229/">LinkedIn</a>
+</div>   
