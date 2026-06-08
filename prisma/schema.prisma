@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model Stadium {
+  id       Int     @id @default(autoincrement())
+  name     String
+  city     String
+  country  String
+  capacity Int
+  slug     String  @unique
+  matches  Match[]
+}
+
+model Team {
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String  @unique
+  slug        String  @unique
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+}
+
+model Match {
+  id           Int           @id @default(autoincrement())
+  homeTeamId   Int
+  awayTeamId   Int
+  stadiumId    Int
+  kickoffTime  DateTime
+  stage        String
+  slug         String        @unique
+  homeTeam     Team          @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam     Team          @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  stadium      Stadium       @relation(fields: [stadiumId], references: [id])
+  ticketOffers TicketOffer[]
+}
+
+model TicketOffer {
+  id           Int     @id @default(autoincrement())
+  matchId      Int
+  providerName String
+  category     String
+  priceUsd     Float
+  affiliateUrl String
+  isOfficial   Boolean @default(false)
+  match        Match   @relation(fields: [matchId], references: [id])
+}
