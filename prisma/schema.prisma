@@ -14,45 +14,80 @@ model User {
 }
 
 model Stadium {
-  id       Int     @id @default(autoincrement())
-  name     String
-  city     String
-  country  String
-  capacity Int
-  slug     String  @unique
-  matches  Match[]
+  id         Int     @id @default(autoincrement())
+  externalId String? @unique @map("external_id")
+  name       String
+  city       String
+  country    String
+  capacity   Int
+  slug       String  @unique
+  matches    Match[]
+
+  @@map("stadiums")
 }
 
 model Team {
   id          Int     @id @default(autoincrement())
+  externalId  String? @unique @map("external_id")
   name        String
   code        String  @unique
   slug        String  @unique
+  crestUrl    String? @map("crest_url")
   homeMatches Match[] @relation("HomeTeam")
   awayMatches Match[] @relation("AwayTeam")
+
+  @@map("teams")
 }
 
 model Match {
   id           Int           @id @default(autoincrement())
-  homeTeamId   Int
-  awayTeamId   Int
-  stadiumId    Int
-  kickoffTime  DateTime
+  externalId   String?       @unique @map("external_id")
+  homeTeamId   Int           @map("home_team_id")
+  awayTeamId   Int           @map("away_team_id")
+  stadiumId    Int           @map("stadium_id")
+  kickoffTime  DateTime      @map("kickoff_time")
   stage        String
   slug         String        @unique
+  status       MatchStatus   @default(SCHEDULED)
+  homeScore    Int?          @map("home_score")
+  awayScore    Int?          @map("away_score")
   homeTeam     Team          @relation("HomeTeam", fields: [homeTeamId], references: [id])
   awayTeam     Team          @relation("AwayTeam", fields: [awayTeamId], references: [id])
   stadium      Stadium       @relation(fields: [stadiumId], references: [id])
   ticketOffers TicketOffer[]
+
+  @@map("matches")
+}
+
+enum MatchStatus {
+  SCHEDULED
+  LIVE
+  FINISHED
+  POSTPONED
 }
 
 model TicketOffer {
   id           Int     @id @default(autoincrement())
-  matchId      Int
-  providerName String
+  matchId      Int     @map("match_id")
+  providerName String  @map("provider_name")
   category     String
-  priceUsd     Float
-  affiliateUrl String
-  isOfficial   Boolean @default(false)
+  priceUsd     Float   @map("price_usd")
+  affiliateUrl String  @map("affiliate_url")
+  isOfficial   Boolean @default(false) @map("is_official")
   match        Match   @relation(fields: [matchId], references: [id])
+
+  @@map("ticket_offers")
+}
+
+model ApiSyncLog {
+  id           Int      @id @default(autoincrement())
+  source       String
+  endpoint     String
+  recordsTotal Int      @map("records_total")
+  recordsSynced Int     @map("records_synced")
+  success      Boolean
+  errorMessage String?  @map("error_message")
+  syncedAt     DateTime @default(now()) @map("synced_at")
+
+  @@map("api_sync_logs")
 }
