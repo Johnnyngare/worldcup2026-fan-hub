@@ -58,6 +58,7 @@ async function main() {
       kickoffTime: new Date('2026-06-15T20:00:00Z'),
       stage: 'Group Stage - Group A',
       slug: 'usa-vs-england-group-a',
+      status:      'SCHEDULED',
     },
   });
 
@@ -69,6 +70,7 @@ async function main() {
       kickoffTime: new Date('2026-06-18T18:00:00Z'),
       stage: 'Group Stage - Group B',
       slug: 'mexico-vs-france-group-b',
+      status:      'SCHEDULED',
     },
   });
 
