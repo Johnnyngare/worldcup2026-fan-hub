@@ -3,10 +3,11 @@ import { gql } from 'graphql-tag';
 export const typeDefs = gql`
 
   type Team {
-    id:   Int!
-    name: String!
-    code: String!
-    slug: String!
+    id:          Int!
+    name:        String!
+    code:        String!
+    slug:        String!
+    crestUrl:    String
     homeMatches: [Match!]!
     awayMatches: [Match!]!
   }
@@ -31,22 +32,25 @@ export const typeDefs = gql`
   }
 
   type Match {
-    id:          Int!
-    slug:        String!
-    stage:       String!
-    kickoffTime: String!
-    homeTeam:    Team!
-    awayTeam:    Team!
-    stadium:     Stadium!
+    id:           Int!
+    slug:         String!
+    stage:        String!
+    status:       String!
+    kickoffTime:  String!
+    homeScore:    Int
+    awayScore:    Int
+    homeTeam:     Team!
+    awayTeam:     Team!
+    stadium:      Stadium!
     ticketOffers: [TicketOffer!]!
   }
 
   type Query {
-    matches:              [Match!]!
-    match(slug: String!): Match
-    teams:                [Team!]!
-    team(slug: String!):  Team
-    stadiums:             [Stadium!]!
+    matches:                [Match!]!
+    match(slug: String!):   Match
+    teams:                  [Team!]!
+    team(slug: String!):    Team
+    stadiums:               [Stadium!]!
     stadium(slug: String!): Stadium
   }
 `;
